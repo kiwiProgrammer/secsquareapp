@@ -23,10 +23,9 @@ class SecSquareUDP(SocketServer.BaseRequestHandler):
         qname = request.q.qname
         qtype = request.q.qtype
 
-        reply = DNSRecord(DNSHeader(id=id, qr=1, aa=1, ra=1), q=request.q)
-
         print (qname)
         if "secsquare.herokuapp.com" == qname:
+            reply = DNSRecord(DNSHeader(id=id, qr=1, aa=1, ra=1), q=request.q)
             # if the query is for SecSquare server
             reply.add_answer(RR(qname,qtype, rdata=A(SECSQUARE_HOST_ADDRESS)))
         else:
@@ -35,12 +34,15 @@ class SecSquareUDP(SocketServer.BaseRequestHandler):
             raw_data = urllib2.urlopen("https://secsquare.herokuapp.com/api.php?name="+label).read()
             data = json.loads(raw_data)
             results = data['results']
+            reply = DNSRecord(DNSHeader(id=id, qr=1, aa=1, ra=1), q=request.q)
             for entry in results:
                 # put all results from SecSquare server into reply
                 if 'MX' in entry['type']:
-                    reply.add_answer(RR(qname,qtype, rdata=MX(entry['target'])))
+                    #reply.add_answer(RR(qname,qtype, rdata=MX(entry['target'])))
+                    continue
                 elif 'AAAA' in entry['type']:
-                    reply.add_answer(RR(qname,qtype, rdata=AAAA(entry['ipv6'])))
+                    #reply.add_answer(RR(qname,qtype, rdata=AAAA(entry['ipv6'])))
+                    continue
                 elif 'A' in entry['type']:
                     reply.add_answer(RR(qname,qtype, rdata=A(entry['ip'])))
         print(reply) # print the DNS response for debugging purposes
