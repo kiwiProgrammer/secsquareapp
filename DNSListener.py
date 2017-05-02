@@ -43,7 +43,7 @@ class SecSquareUDP(SocketServer.BaseRequestHandler):
                 elif 'AAAA' in entry['type']:
                     #reply.add_answer(RR(qname,qtype, rdata=AAAA(entry['ipv6'])))
                     continue
-                elif 'A' in entry['type']:
+                elif 'A' in entry['type'] and 'ip' in entry:
                     reply.add_answer(RR(qname,qtype, rdata=A(entry['ip'])))
         print(reply) # print the DNS response for debugging purposes
         socket.sendto(reply.pack(), self.client_address)

@@ -5,7 +5,8 @@ import time
 #st = os.stat(r"/etc/NetworkManager/system-connections/test.txt")
 
 path = '/etc/NetworkManager/system-connections'
-pathForSavedConfigFiles = "/home/kiwi/Desktop/configFiles"
+#pathForSavedConfigFiles = "/home/kiwi/Desktop/configFiles"
+pathForSavedConfigFiles = os.path.join(os.path.expanduser("~"), "Desktop/configFiles")
 TIMEINSECONDSBEFORENEXTCHECK = 3
 
 listOfConfigFiles = []
